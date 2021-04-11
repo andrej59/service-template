@@ -1,4 +1,4 @@
 package ru.ajana.service.template.config;
 
-public class AppConfig {
+public class ServiceConfig {
 }

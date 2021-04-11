@@ -7,6 +7,318 @@
     <groupId>ru.ajana</groupId>
     <artifactId>service-template</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-    
+
+    <properties>
+        <!-- Environment -->
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Project -->
+
+        <!-- Spring -->
+        <spring.version>5.3.5</spring.version>
+
+        <!-- Spring boot -->
+        <spring-boot.version>2.4.4</spring-boot.version>
+
+        <!-- Commons -->
+        <jetty.version>9.4.30.v20200611</jetty.version>
+        <jackson.version>2.11.2</jackson.version>
+        <postgresql.version>42.2.5</postgresql.version>
+        <liquibase.version>3.5.3</liquibase.version>
+
+        <!-- Logging -->
+        <slf4j-api.version>1.7.30</slf4j-api.version>
+        <logback.version>1.2.3</logback.version>
+
+        <!-- Testing -->
+        <junit.version>5.7.1</junit.version>
+        <mockito.version>3.6.28</mockito.version>
+        <jmh.version>1.24</jmh.version>
+
+        <!-- Plugins -->
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <spring-boot-maven-plugin.version>2.3.1.RELEASE</spring-boot-maven-plugin.version>
+        <git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
+    </properties>
+
+
+    <!-- Profiles -->
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>local</value>
+                </property>
+            </activation>
+            <!--
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <skipTests>true</skipTests>
+            </properties>
+            -->
+        </profile>
+
+        <profile>
+            <id>dev</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>test</value>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Neumann-SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            -->
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Project -->
+
+        <!-- Spring -->
+
+        <!-- Spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+
+        <!-- Postgresql
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        -->
+
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <aggregate>false</aggregate>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
+                <configuration>
+                    <mainClass>ru.ajana.service.template.Application</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>get-build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-jar</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git-commit-id-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                    <execution>
+                        <id>validate-the-git-infos</id>
+                        <goals>
+                            <goal>validateRevision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
