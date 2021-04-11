@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * Контроллер REST API сервиса.
+ */
 @RestController
 @ResponseBody
 @RequestMapping(path = "/v1", produces = APPLICATION_JSON_VALUE)
